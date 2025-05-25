@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-exports.agregarUsuario = async (req, res) => {
+exports.registerUser = async (req, res) => {
     const { username, password } = req.body;
 
     res.json({
