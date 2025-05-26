@@ -5,7 +5,7 @@ exports.user = (odm) => {
         phoneNumber: { type: String, required: false, default: null }, // Puede ser nulo
         residenceArea: { type: String, required: false, default: null }, // Puede ser nulo
         password: { type: String, required: true },
-        rol: { type: String, required: false, default: 'Usuario' }
+        rol: { type: String, required: false, default: 'user' }
     });
 
     return odm.model('User', userSchema);
