@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { user } = require('./User');
+const { plot } = require('./Plot');
 
 
 mongo().catch(err => console.log(err)); // Si ocurre un error lanzarlo en la consola
@@ -13,6 +14,7 @@ async function mongo() {
 // Cargar modelos
 let jsonModels = {
     user: user(mongoose),
+    plot: plot(mongoose),
 };
 
 exports.models = jsonModels;
