@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { user } = require('./User');
 
 
-mongo.catch(err => console.log(err)); // Si ocurre un error lanzarlo en la consola
+mongo().catch(err => console.log(err)); // Si ocurre un error lanzarlo en la consola
 
 // Conexion
 async function mongo() {
