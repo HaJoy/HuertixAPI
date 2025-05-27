@@ -58,17 +58,15 @@ exports.updateVolunteers = async (req, res) => {
             return res.status(404).json({ mensaje: "Parcela no encontrada" });
         }
 
-        // Si plotVolunteers es null o undefined, inicialízar como objeto vacío
-        if (!plotFound.plotVolunteers) plotFound.plotVolunteers = {};
+        // Si plotVolunteers es null o undefined, inicializar como Map vacío
+        if (!plotFound.plotVolunteers) plotFound.plotVolunteers = new Map();
 
-        // Agregar el usuario y su tarea, tambien sirve para actualizarlo
-        plotFound.plotVolunteers[username] = { task };
-        // Indicar a Mongoose que el campo fue modificado
-        plotFound.markModified('plotVolunteers');
+        // Usar set de Map para agregar o actualizar el voluntario
+        plotFound.plotVolunteers.set(username, { task });
 
         await plotFound.save();
 
-        res.status(200).json({ mensaje: "Voluntarios actualizados", plot: plotFound });
+        res.status(200).json({ mensaje: "Voluntarios actualizados", plotVolunteers: Object.fromEntries(plotFound.plotVolunteers) });
     } catch (error) {
         res.status(500).json({ mensaje: "Error al actualizar voluntarios", error: error.message });
     }

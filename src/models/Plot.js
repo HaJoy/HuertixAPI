@@ -6,10 +6,13 @@ exports.plot = (odm) => {
     plotCropType: { type: String, required: true },
     plotStatus: { type: Boolean, required: false, default: false }, // True: Disponible; False: No disponible
     plotVolunteers: {
-      type: odm.Schema.Types.Mixed,
-      required: false,
+      type: Map,
+      of: new odm.Schema({
+        task: { type: String }
+      }),
       default: {},
-    }, // Almacena el nombre del usuario y su tarea en la parcela
+      required: false
+    },
   });
 
   return odm.model("Plot", plotSchema);
