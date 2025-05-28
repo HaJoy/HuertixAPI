@@ -50,7 +50,7 @@ exports.getPlots = async (req, res) => {
 };
 
 exports.updateVolunteers = async (req, res) => {
-    const { plotName, username, task, time } = req.body;
+    const { plotName, username, task, time, days } = req.body;
 
     try {
         let plotFound = await models.plot.findOne({ plotName });
@@ -60,13 +60,14 @@ exports.updateVolunteers = async (req, res) => {
 
         // Si plotVolunteers es null o undefined, inicializar como Map vacío
         if (!plotFound.plotVolunteers) plotFound.plotVolunteers = new Map();
-
-        // if (plotFound.plotVolunteers.has(username)) {
-        //   return res.status(400).json({ mensaje: "El usuario ya esta inscrito en la parcela" });
-        // }
+        
+        // El usuario ya esta inscrito
+        if (plotFound.plotVolunteers.has(username)) {
+          return res.status(400).json({ mensaje: "El usuario ya esta inscrito en la parcela" });
+        }
 
         // Usar set de Map para agregar o actualizar el voluntario
-        plotFound.plotVolunteers.set(username, { task, time });
+        plotFound.plotVolunteers.set(username, { task, time, days });
 
         await plotFound.save();
 
