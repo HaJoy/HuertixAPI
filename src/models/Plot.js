@@ -8,7 +8,8 @@ exports.plot = (odm) => {
     plotVolunteers: {
       type: Map,
       of: new odm.Schema({
-        task: { type: String }
+        task: { type: String },
+        time: { type: Number, default: 0 }
       }),
       default: {},
       required: false
