@@ -76,3 +76,36 @@ exports.updateVolunteers = async (req, res) => {
         res.status(500).json({ mensaje: "Error al actualizar voluntarios", error: error.message });
     }
 };
+
+exports.assignDateToVolunteer = async (req, res) => {
+  const { plotName, username, date } = req.body;
+
+  try {
+    let plotFound = await models.plot.findOne({ plotName });
+    if (!plotFound) {
+      return res.status(404).json({ mensaje: "Parcela no encontrada" });
+    }
+
+    // Asegurarse de que plotVolunteers es un Map
+    if (!plotFound.plotVolunteers) plotFound.plotVolunteers = new Map();
+    if (!(plotFound.plotVolunteers instanceof Map)) {
+      plotFound.plotVolunteers = new Map(Object.entries(plotFound.plotVolunteers));
+    }
+
+    // Verificar si el usuario existe como voluntario
+    if (!plotFound.plotVolunteers.has(username)) {
+      return res.status(404).json({ mensaje: "El usuario no está inscrito en la parcela" });
+    }
+
+    // Obtener los datos actuales del voluntario y actualizar solo el campo date
+    const volunteerData = plotFound.plotVolunteers.get(username);
+    volunteerData.date = date;
+    plotFound.plotVolunteers.set(username, volunteerData);
+
+    await plotFound.save();
+
+    res.status(200).json({ mensaje: "Fecha asignada correctamente", plotVolunteers: Object.fromEntries(plotFound.plotVolunteers) });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al asignar fecha", error: error.message });
+  }
+};

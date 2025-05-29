@@ -10,7 +10,8 @@ exports.plot = (odm) => {
       of: new odm.Schema({
         task: { type: String },
         time: { type: Number, default: 0 },
-        days: [{ type: String }]
+        days: [{ type: String }],
+        date: { type: String, required: false, default: "No date" }
       }),
       default: {},
       required: false
